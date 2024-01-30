@@ -4,6 +4,9 @@ from monobank.base import BaseMonobankApiHelper
 
 
 class MonobankClient(BaseMonobankApiHelper):
+    def __init__(self, path_to_public_key: str, path_to_private_key: str, url: str):
+        super().__init__(path_to_public_key, path_to_private_key, "/personal/client-info")
+
     def get_client_info(self, token: str) -> dict:
         headers = self.base_auth_headers
         headers["X-Token"] = token
