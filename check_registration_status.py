@@ -4,6 +4,9 @@ from monobank.base import BaseMonobankApiHelper
 
 
 class CheckRequestStatus(BaseMonobankApiHelper):
+    def __init__(self, path_to_public_key: str, path_to_private_key: str):
+        super().__init__(path_to_public_key, path_to_private_key, "/personal/auth/registration/status")
+
     def check(self):
         response = self._get_data_from_api()
         data, status_code = response.json(), response.status_code

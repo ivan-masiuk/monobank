@@ -6,7 +6,9 @@ from ecdsa import SigningKey
 
 
 class BaseMonobankApiHelper:
-    def __init__(self, path_to_public_key: str, path_to_private_key: str):
+    def __init__(self, path_to_public_key: str, path_to_private_key: str, url: str):
+        self.url = url
+
         self.path_to_public_key = path_to_public_key
         self.path_to_private_key = path_to_private_key
         self.time_now = str(self.to_timestamp(datetime.now()))
@@ -35,8 +37,7 @@ class BaseMonobankApiHelper:
             return base64.b64encode(pubkey_file.read()).decode("utf-8")
 
     def _get_x_sign(self):
-        url = "/personal/auth/registration/status"
-        data = (self.time_now + url).encode("utf-8")
+        data = (self.time_now + self.url).encode("utf-8")
 
         with open(self.path_to_private_key) as f:
             sk = SigningKey.from_pem(f.read(), hashfunc=hashlib.sha256)

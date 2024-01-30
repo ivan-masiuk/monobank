@@ -5,6 +5,8 @@ from monobank.base import BaseMonobankApiHelper
 
 
 class Registration(BaseMonobankApiHelper):
+    def __init__(self, path_to_public_key: str, path_to_private_key: str):
+        super().__init__(path_to_public_key, path_to_private_key, "/personal/auth/registration")
 
     @staticmethod
     def get_logo(logo_path: str):
