@@ -1,13 +1,13 @@
 import requests
 
-from monobank.base import BaseMonobankApiHelper
+from base import BaseMonobankApiHelper
 
 
 class MonobankClient(BaseMonobankApiHelper):
-    def __init__(self, path_to_public_key: str, path_to_private_key: str, url: str):
+    def __init__(self, path_to_public_key: str, path_to_private_key: str):
         super().__init__(path_to_public_key, path_to_private_key, "/personal/client-info")
 
-    def get_client_info(self, token: str) -> dict:
+    def get_client_info(self, token: str):
         headers = self.base_auth_headers
         headers["X-Token"] = token
 
@@ -17,21 +17,4 @@ class MonobankClient(BaseMonobankApiHelper):
             json=self.base_auth_payload,
             headers=self.base_auth_headers,
         )
-        self.print_data(response)
-        return response.json()
-
-    @staticmethod
-    def print_data(response):
-        data, status_code = response.json(), response.status_code
-
-        print(f"Status code: {status_code}\n")
-        print(f"Data:\n{response.text}")
-
-
-if __name__ == "__main__":
-    MonobankClient(
-        "../keys/pub.pem",
-        "../keys/private.pem",
-    ).get_client_info(
-        "key",
-    )
+        return response

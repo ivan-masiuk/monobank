@@ -190,3 +190,5 @@ fabric.properties
 **venv
 
 __pycache__
+keys/pub.pem
+keys/private.pem

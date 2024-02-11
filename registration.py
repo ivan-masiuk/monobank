@@ -1,7 +1,7 @@
 import base64
 import requests
 
-from monobank.base import BaseMonobankApiHelper
+from base import BaseMonobankApiHelper
 
 
 class Registration(BaseMonobankApiHelper):
@@ -10,8 +10,12 @@ class Registration(BaseMonobankApiHelper):
 
     @staticmethod
     def get_logo(logo_path: str):
-        with open(logo_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+        # check if file exists
+        try:
+            with open(logo_path, "rb") as image_file:
+                return base64.b64encode(image_file.read()).decode("utf-8")
+        except FileNotFoundError:
+            raise Exception("File with your logo not found!")
 
     def register(
             self,
@@ -40,28 +44,4 @@ class Registration(BaseMonobankApiHelper):
             json=payload,
             headers=self.base_auth_headers,
         )
-
-        self.print_result(response)
         return response
-
-    @staticmethod
-    def print_result(registration_response: requests.Response):
-        print(f"Status code: {registration_response.status_code}\n")
-        print(f"Your keyId: {registration_response.json()}\n")
-        print(f"Data: {registration_response.text}")
-
-
-if __name__ == '__main__':
-    public_key_path = "../keys/pub.pem"
-    private_key_path = "../keys/private.pem"
-
-    response = Registration(
-        public_key_path, private_key_path
-    ).register(
-        project_name="Test",
-        short_description_project="Test",
-        contact_person_full_name="Test",
-        contact_person_phone_number="+380000000000",
-        contact_person_email="",
-        logo_path="logo.png",
-    )

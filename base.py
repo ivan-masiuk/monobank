@@ -11,10 +11,28 @@ class BaseMonobankApiHelper:
 
         self.path_to_public_key = path_to_public_key
         self.path_to_private_key = path_to_private_key
+        self._check_if_keys_exists()
+
         self.time_now = str(self.to_timestamp(datetime.now()))
 
         self.base_auth_headers = self.get_base_auth_headers()
         self.base_auth_payload = self.get_base_auth_payload()
+
+    def _check_if_keys_exists(self):
+        if not self.path_to_public_key or not self.path_to_private_key:
+            raise Exception("Path to public or private key is not set!")
+
+        try:
+            with open(self.path_to_public_key, "rb") as pubkey_file:
+                pubkey_file.read()
+        except FileNotFoundError:
+            raise Exception("Public key file not found!")
+
+        try:
+            with open(self.path_to_private_key, "rb") as privkey_file:
+                privkey_file.read()
+        except FileNotFoundError:
+            raise Exception("Private key file not found!")
 
     @staticmethod
     def to_timestamp(dtime):
